@@ -3,13 +3,12 @@ package life
 import (
 	"rand"
 	"time"
-	"fmt"
 )
 
 type lifeInterface interface {
 	Init()
 	Update()
-	Print()
+	Map(func())
 }
 
 type lifeType struct {
@@ -73,17 +72,11 @@ func (this *lifeType) Update() {
 	this.colony = next
 }
 
-func (this *lifeType) Print() {
+func (this *lifeType) Map(fn func(state bool)) {
 	for _,v := range this.colony {
 	for _,v := range v {
-		if v {
-			fmt.Printf("\x1b[47m ")
-		} else {
-			fmt.Printf("\x1b[41m ")
-		}
-		fmt.Printf("\x1b[0m")
-	}
-	}
+		fn(v)
+	}}
 }
 
 func New(x,y int) *lifeType {
