@@ -9,10 +9,15 @@ type lifeInterface interface {
 	Init()
 	Update()
 	Map(func())
+	GetColony() [][] bool
 }
 
 type lifeType struct {
 	colony[][] bool
+}
+
+func (this *lifeType) GetColony() [][] bool {
+	return this.colony
 }
 
 func (this *lifeType) neighborCount(x, y int) int {
@@ -32,13 +37,10 @@ func (this *lifeType) neighborCount(x, y int) int {
 
 func (this *lifeType) Init() {
 	rand.Seed(time.Nanoseconds());
-//	for i := 0; i < len(this.colony); i++ {
-//	for j := 0; j < len(this.colony[i]); j++ {
-	//	this.colony[i][j] = rand.Int() % 2 == 0
-	//}}
-	this.colony[5][5] = true;
-	this.colony[5][6] = true;
-	this.colony[5][7] = true;
+	for i := 0; i < len(this.colony); i++ {
+	for j := 0; j < len(this.colony[i]); j++ {
+		this.colony[i][j] = rand.Int() % 2 == 0
+	}}
 }
 
 func (this *lifeType) Update() {
@@ -77,6 +79,10 @@ func (this *lifeType) Map(fn func(state bool)) {
 	for _,v := range v {
 		fn(v)
 	}}
+}
+
+func (this *lifeType) Reduce(fn func()) {
+	fn()
 }
 
 func New(x,y int) *lifeType {

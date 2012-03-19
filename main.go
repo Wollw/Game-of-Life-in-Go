@@ -1,26 +1,31 @@
-/*
-	A simulation of Conway's Game of Life in a terminal.
-*/
-package main
+package main;
 
 import (
-	"fmt"
+	"exp/gui/x11"
+	"image"
 	"time"
 	"./life"
 )
 
 func main() {
-	l := life.New(80,24)
+	l := life.New(600,800)
 	l.Init()
-	for generation := 0; ; generation++ {
-
-		l.Map(func(state bool) { 
-			var str string
-			if state { str = "\x1b[47m " } else { str = "\x1b[41m " }
-			fmt.Printf("%s", str)
-		})
-		fmt.Printf("\x1b[0m")
+	w,_ := x11.NewWindow()
+	img := w.Screen()
+	c1 := image.RGBAColor{10,10,10,255}
+	c2 := image.RGBAColor{222,222,222,255}
+	for true {
+		w.FlushImage()
+		col := l.GetColony()
+		for i := 0; i < len(col); i++ {
+		for j := 0; j < len(col[i]); j++ {
+			if col[i][j] {
+				img.Set(i, j, c2)
+			} else {
+				img.Set(i, j, c1)
+			}
+		}}
 		l.Update()
-		time.Sleep(1000000000)
+		time.Sleep(25000000)
 	}
 }
